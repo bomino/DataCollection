@@ -1,0 +1,3 @@
+Invoice Number,Invoice Date,Purchase Order Number,Vendor Number,Vendor Name,Invoice Amount,Currency,Payment Terms,Due Date,Payment Status,Payment Date,Payment Method,Payment Reference,Tax Amount,Freight Amount,Discount Amount,Total Amount,Cost Center Number,GL Account,Status
+INV-89012,2024-01-18,PO-124678,78186,National Building Supply,844.60,USD,Net 30,2024-02-17,Paid,2024-02-15,ACH,ACH-78901,0.00,75.00,0.00,919.60,7170-065,5001,Closed
+INV-89013,2024-01-19,PO-124679,78187,Southern Paint Supplies,249.90,USD,Net 30,2024-02-18,Pending,,,,0.00,25.00,0.00,274.90,7170-066,5001,Open

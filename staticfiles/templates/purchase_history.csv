@@ -1,0 +1,3 @@
+Purchase Order Number,Item Number,Item Description,Vendor Number,Vendor Name,Order Date,Delivery Date,Quantity,Order Unit of Measure,Unit Price,Currency,Total Amount,Freight Cost,Lead Time (Days),Delivery Location,Cost Center Number,Payment Terms,Invoice Number,Invoice Date,Invoice Amount,Invoice Status,Status
+PO-124678,10021,Drywall 5/8 X 8 FT,78186,National Building Supply,2024-01-15,2024-01-18,20,CS,42.23,USD,844.60,75.00,3,Building A Warehouse,7170-065,Net 30,INV-89012,2024-01-18,919.60,Paid,Completed
+PO-124679,10022,"Paint Roller 9""",78187,Southern Paint Supplies,2024-01-16,2024-01-19,10,BX,24.99,USD,249.90,25.00,3,Building B Storage,7170-066,Net 30,INV-89013,2024-01-19,274.90,Pending,Delivered

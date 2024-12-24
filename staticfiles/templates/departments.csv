@@ -1,0 +1,3 @@
+Department ID,Department Name,Parent Department,Cost Center Code,Manager,Location,GL Code,Expense Account,Status
+D001,Facilities Management,Operations,7170-065,Robert Wilson,Main Hospital,5001,6010,Active
+D002,Building Maintenance,Facilities Management,7170-066,Sarah Davis,Main Hospital,5001,6020,Active

@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Upload File | Data Collection
+{% endblock %}
+
+{% block content %}
+  <div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Material Acquisition Data Collection</h2>
+      <a href="{% url 'upload_list' %}" class="btn btn-outline-primary"><i class="bi bi-list-ul"></i>View All Uploads</a>
+    </div>
+
+    <!-- Enhanced Instructions -->
+    <div class="upload-instructions">
+      <h5 class="mb-3"><i class="bi bi-lightbulb me-2"></i>How to Upload Your Data</h5>
+      <div class="instruction-step">1. Choose the appropriate category for your data from the options below</div>
+      <div class="instruction-step">2. Download the template for your chosen category</div>
+      <div class="instruction-step">3. Fill in your data following the template structure</div>
+      <div class="instruction-step">4. Save your file in CSV format</div>
+      <div class="instruction-step">5. Click the Upload button and select your file</div>
+    </div>
+
+    <!-- Divider -->
+    <div class="content-divider">
+      <i class="bi bi-arrow-down-circle text-primary"></i>
+    </div>
+
+    <!-- Info Alert -->
+    <div class="alert alert-info alert-modern mb-4">
+      <div class="d-flex">
+        <i class="bi bi-info-circle alert-icon"></i>
+        <div>
+          <h6 class="alert-heading mb-1">File Requirements</h6>
+          <ul class="mb-0 text-muted">
+            <li>All files must be in CSV format</li>
+            <li>Maximum file size: 10MB</li>
+            <li>Use UTF-8 encoding</li>
+            <li>Avoid special characters in column headers</li>
+            <li>Follow the template structure exactly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Left Column - Upload Categories -->
+      <div class="col-lg-8">
+        <!-- Master Data Section -->
+        <div class="section-divider">
+          <h5 class="category-header">Master Data</h5>
+          <div class="row g-3">
+            <!-- Vendor Master -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-building"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Vendor Master
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Vendor ID<br>- Vendor Name<br>- Contact Information<br>- Tax ID<br>- Address Details"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Comprehensive vendor information and details</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=vendor" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your vendor master data file"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'vendor' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the standard vendor template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Master -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-box-seam"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Item Master
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Item ID<br>- Item Description<br>- Category<br>- Unit of Measure<br>- Price Information"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Product catalog and specifications</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=item" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your item master data file"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'item' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the item template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div class="section-divider">
+          <h5 class="category-header">Transactions</h5>
+          <div class="row g-3">
+            <!-- Purchase History -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Purchase History
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Purchase Order ID<br>- Vendor ID<br>- Item ID<br>- Quantity<br>- Price<br>- Order Date"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Historical purchase transaction records</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=purchase" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your purchase history data"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'purchase' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the purchase history template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Invoice Data -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-receipt"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Invoice Data
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Invoice Number<br>- Purchase Order ID<br>- Amount<br>- Invoice Date<br>- Payment Terms"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Payment and invoice information</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=invoice" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your invoice data"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'invoice' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the invoice template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization Section -->
+        <div class="section-divider">
+          <h5 class="category-header">Organization</h5>
+          <div class="row g-3">
+            <!-- Contracts -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Contracts
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Contract ID<br>- Vendor ID<br>- Start Date<br>- End Date<br>- Contract Terms<br>- Value"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Contract terms and agreements</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=contract" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your contract data"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'contract' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the contract template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Facilities -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-building"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Facilities
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Facility ID<br>- Facility Name<br>- Location<br>- Capacity<br>- Contact Details"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Facility locations and information</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=facility" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your facility data"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'facility' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the facility template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Departments -->
+            <div class="col-md-6">
+              <div class="card feature-card shadow-hover">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="feature-icon">
+                      <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <h6 class="card-title mb-0 ms-3">
+                      Departments
+                      <i class="bi bi-question-circle ms-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-html="true" title="Required fields:<br>- Department ID<br>- Department Name<br>- Parent Department<br>- Head Count<br>- Budget Details"></i>
+                    </h6>
+                  </div>
+                  <p class="card-text text-muted small mb-3">Department structure and hierarchy</p>
+                  <div class="btn-group-actions">
+                    <a href="{% url 'upload_data' %}?type=department" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="Upload your department data"><i class="bi bi-upload"></i>Upload</a>
+                    <a href="{% url 'download_template' 'department' %}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" title="Download the department template"><i class="bi bi-download"></i>Template</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Dashboard -->
+      <div class="col-lg-4">
+        <div class="dashboard-card card">
+          <div class="card-header">
+            <h5 class="mb-0">Upload Status</h5>
+          </div>
+          <div class="card-body">
+            <!-- Summary Stats -->
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <div class="stat-item">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-files fs-4 me-2 text-primary"></i>
+                    <div>
+                      <div class="text-muted small">Total Uploads</div>
+                      <h4 class="mb-0">{{ stats.total_uploads|default:'0' }}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="stat-item">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle fs-4 me-2 text-success"></i>
+                    <div>
+                      <div class="text-muted small">Validated</div>
+                      <h4 class="mb-0">{{ stats.approved_count|default:'0' }}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <h6 class="category-header">Recent Activity</h6>
+            {% if recent_uploads %}
+              <div class="activity-feed">
+                {% for upload in recent_uploads %}
+                  <div class="activity-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-1 text-truncate">{{ upload.get_template_type_display }}</h6>
+                        <small class="text-muted">{{ upload.created_at|date:'M d, H:i' }}</small>
+                      </div>
+                      <span class="status-badge {% if upload.status == 'approved' %}
+                          
+                          
+                          
+                          
+                          
+                          
+                          bg-success
+
+
+
+
+
+
+
+                        {% elif upload.status == 'rejected' %}
+                          
+                          
+                          
+                          
+                          
+                          
+                          bg-danger
+
+
+
+
+
+
+
+                        {% elif upload.status == 'validating' %}
+                          
+                          
+                          
+                          
+                          
+                          
+                          bg-info
+
+
+
+
+
+
+
+                        {% else %}
+                          
+                          
+                          
+                          
+                          
+                          
+                          bg-warning
+
+
+
+
+
+
+                        {% endif %}">
+                        <i class="bi {% if upload.status == 'approved' %}
+                            
+                            
+                            
+                            
+                            
+                            
+                            bi-check-circle
+
+
+
+
+
+
+
+                          {% elif upload.status == 'rejected' %}
+                            
+                            
+                            
+                            
+                            
+                            
+                            bi-x-circle
+
+
+
+
+
+
+
+                          {% elif upload.status == 'validating' %}
+                            
+                            
+                            
+                            
+                            
+                            
+                            bi-arrow-repeat rotate-animation
+
+
+
+
+
+
+
+                          {% else %}
+                            
+                            
+                            
+                            
+                            
+                            
+                            bi-clock
+
+
+
+
+
+
+                          {% endif %}">
+
+                        </i>
+                        {{ upload.get_status_display }}
+                      </span>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="empty-state">
+                <i class="bi bi-inbox empty-state-icon"></i>
+                <p class="text-muted mb-0">No recent uploads</p>
+              </div>
+            {% endif %}
+
+            <!-- Quick Tips -->
+            <div class="mt-4">
+              <h6 class="category-header">Quick Tips</h6>
+              <div class="card bg-light border-0">
+                <div class="card-body p-3">
+                  <ul class="mb-0 small text-muted">
+                    <li>Always use the provided templates</li>
+                    <li>Ensure all required fields are filled</li>
+                    <li>Check data format before uploading</li>
+                    <li>Validate your CSV file encoding</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/data_collection.js' %}"></script>
+{% endblock %}
