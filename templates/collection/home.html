@@ -259,130 +259,57 @@
             {% if recent_uploads %}
               <div class="activity-feed">
                 {% for upload in recent_uploads %}
+                  <!-- In your Recent Activity section -->
                   <div class="activity-item">
                     <div class="d-flex justify-content-between align-items-center">
                       <div>
-                        <h6 class="mb-1 text-truncate">{{ upload.get_template_type_display }}</h6>
+                        <h6 class="mb-1 text-truncate">
+                          {% if upload.data_type %}
+                            {{ upload.data_type }}
+                          {% else %}
+                            {{ upload.get_template_type_display }}
+                          {% endif %}
+                        </h6>
                         <small class="text-muted">{{ upload.created_at|date:'M d, H:i' }}</small>
                       </div>
                       <span class="status-badge {% if upload.status == 'approved' %}
                           
-                          
-                          
-                          
-                          
-                          
                           bg-success
-
-
-
-
-
 
 
                         {% elif upload.status == 'rejected' %}
                           
-                          
-                          
-                          
-                          
-                          
                           bg-danger
-
-
-
-
-
 
 
                         {% elif upload.status == 'validating' %}
                           
-                          
-                          
-                          
-                          
-                          
                           bg-info
-
-
-
-
-
 
 
                         {% else %}
                           
-                          
-                          
-                          
-                          
-                          
                           bg-warning
-
-
-
-
-
 
                         {% endif %}">
                         <i class="bi {% if upload.status == 'approved' %}
                             
-                            
-                            
-                            
-                            
-                            
                             bi-check-circle
-
-
-
-
-
 
 
                           {% elif upload.status == 'rejected' %}
                             
-                            
-                            
-                            
-                            
-                            
                             bi-x-circle
-
-
-
-
-
 
 
                           {% elif upload.status == 'validating' %}
                             
-                            
-                            
-                            
-                            
-                            
                             bi-arrow-repeat rotate-animation
-
-
-
-
-
 
 
                           {% else %}
                             
-                            
-                            
-                            
-                            
-                            
                             bi-clock
-
-
-
-
-
 
                           {% endif %}">
 

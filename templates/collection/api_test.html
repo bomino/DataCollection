@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  API Testing | Data Collection
+{% endblock %}
+
+{% block content %}
+  <div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0"><i class="bi bi-code-slash me-2"></i>API Testing</h2>
+      <a href="{% url 'home' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Back to Home</a>
+    </div>
+
+    <!-- API Endpoints Testing -->
+    <div class="row">
+      <div class="col-lg-4">
+        <!-- Endpoints List -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0">API Endpoints</h5>
+          </div>
+          <div class="card-body">
+            <div class="list-group">
+              <button class="list-group-item list-group-item-action" onclick="testEndpoint('list-uploads')">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-0">List Uploads</h6>
+                    <small class="text-muted">GET /api/uploads/</small>
+                  </div>
+                  <span class="badge bg-primary">GET</span>
+                </div>
+              </button>
+              <button class="list-group-item list-group-item-action" onclick="showUploadForm()">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-0">Upload File</h6>
+                    <small class="text-muted">POST /api/uploads/</small>
+                  </div>
+                  <span class="badge bg-success">POST</span>
+                </div>
+              </button>
+              <!-- Add more endpoints as needed -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <!-- Response Panel -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Response</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearResponse()">Clear</button>
+          </div>
+          <div class="card-body">
+            <!-- File Upload Form -->
+            <div id="uploadForm" class="mb-3 d-none">
+              <form id="apiUploadForm" class="mb-3">
+                <div class="mb-3">
+                  <label class="form-label">File</label>
+                  <input type="file" class="form-control" id="apiFile" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Template Type</label>
+                  <select class="form-select" id="apiTemplateType" required>
+                    <option value="">Select type...</option>
+                    <option value="vendor">Vendor Master</option>
+                    <option value="item">Item Master</option>
+                    <option value="generic">Generic</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Notes</label>
+                  <textarea class="form-control" id="apiNotes" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+              </form>
+            </div>
+
+            <!-- Response Display -->
+            <pre id="responsePanel" class="bg-light p-3 rounded">Select an endpoint to test</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    function getCookie(name) {
+      let cookieValue = null
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim()
+          if (cookie.substring(0, name.length + 1) === name + '=') {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+            break
+          }
+        }
+      }
+      return cookieValue
+    }
+    
+    async function testEndpoint(endpoint) {
+      try {
+        const response = await fetch('/api/uploads/', {
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        })
+        const data = await response.json()
+        displayResponse(data)
+      } catch (error) {
+        displayResponse({ error: error.message })
+      }
+    }
+    
+    function showUploadForm() {
+      document.getElementById('uploadForm').classList.remove('d-none')
+      document.getElementById('responsePanel').textContent = 'Ready to upload'
+    }
+    
+    function clearResponse() {
+      document.getElementById('responsePanel').textContent = 'Select an endpoint to test'
+      document.getElementById('uploadForm').classList.add('d-none')
+    }
+    
+    function displayResponse(data) {
+      document.getElementById('responsePanel').textContent = JSON.stringify(data, null, 2)
+    }
+    
+    // Handle file upload
+    document.getElementById('apiUploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+    
+      const formData = new FormData()
+      formData.append('file', document.getElementById('apiFile').files[0])
+      formData.append('template_type', document.getElementById('apiTemplateType').value)
+      formData.append('notes', document.getElementById('apiNotes').value)
+    
+      try {
+        const response = await fetch('/api/uploads/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: formData
+        })
+        const data = await response.json()
+        displayResponse(data)
+      } catch (error) {
+        displayResponse({ error: error.message })
+      }
+    })
+  </script>
+{% endblock %}

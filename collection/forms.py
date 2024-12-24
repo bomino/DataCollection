@@ -45,11 +45,11 @@ class DataUploadForm(forms.ModelForm):
             raise forms.ValidationError(error_message)
 
         return file
-
     def save(self, commit=True):
         instance = super().save(commit=False)
-        if self.template_type:
-            instance.template_type = self.template_type
+        instance.template_type = self.template_type
+        if hasattr(self, 'user'):  # Add this check
+            instance.user = self.user
         if commit:
             instance.save()
         return instance

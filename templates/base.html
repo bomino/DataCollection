@@ -25,7 +25,7 @@
       <div class="container">
         <a class="navbar-brand" href="/">
           <i class="bi bi-database me-2"></i>
-          Material Acquisitions Portal
+          Data Collection Portal
         </a>
         {% if user.is_authenticated %}
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
@@ -37,17 +37,23 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'upload_list' %}"><i class="bi bi-list-ul me-1"></i>View Uploads</a>
               </li>
-              {% if user.is_staff %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'admin:index' %}" target="_blank"><i class="bi bi-gear me-1"></i>Admin Panel</a>
-                </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'generic_upload' %}"><i class="bi bi-cloud-upload me-1"></i>Generic Upload</a>
+              </li>
+              <!-- In base.html navigation -->
+              {% if user.is_authenticated %}
+                <!-- Other nav items -->
+                {% if user.is_staff %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'api_test' %}"><i class="bi bi-code-slash me-1"></i>API Test</a>
+                  </li>
+                {% endif %}
               {% endif %}
             </ul>
             <div class="navbar-nav">
               <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                  <i class="bi bi-person-circle me-1"></i>
-                  {{ user.username }}
+                  <i class="bi bi-person-circle me-1"></i>{{ user.username }}
                   {% if user.is_staff %}
                     <span class="badge bg-light text-primary ms-1">Admin</span>
                   {% endif %}
@@ -97,7 +103,7 @@
     <footer class="footer">
       <div class="container">
         <div class="text-center text-muted">
-          <small>&copy; 2024 Data Collection Portal. All rights reserved.</small>
+          <small>&copy; 2024 VSTX Data Collection Portal. All rights reserved.</small>
         </div>
       </div>
     </footer>

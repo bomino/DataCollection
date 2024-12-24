@@ -841,3 +841,116 @@ body {
     border: none;
     margin-bottom: 1rem;
 }
+
+/* Login Page Styles */
+.login-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+}
+
+.login-box {
+    width: 100%;
+    padding: 20px;
+}
+
+.company-logo {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.login-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+}
+
+.form-floating>label {
+    color: #6c757d;
+}
+
+.form-floating>.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 1rem;
+    height: calc(3.5rem + 2px);
+    transition: all 0.2s ease;
+}
+
+.form-floating>.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+.btn-login {
+    padding: 0.8rem;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .login-page {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+    }
+
+    .login-card {
+        background: rgba(33, 37, 41, 0.95);
+    }
+
+    .login-title {
+        color: #fff;
+    }
+
+    .login-subtitle {
+        color: #adb5bd;
+    }
+
+    .form-floating>.form-control {
+        background-color: #2b3035;
+        border-color: #495057;
+        color: #fff;
+    }
+
+    .form-floating>.form-control:focus {
+        background-color: #2b3035;
+        border-color: var(--primary-color);
+    }
+
+    .form-floating>label {
+        color: #adb5bd;
+    }
+}

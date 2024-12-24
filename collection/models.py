@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 import pandas as pd
 import os
 
@@ -48,6 +49,14 @@ class DataTemplate(models.Model):
 
 class DataUpload(models.Model):
     """Model to handle file uploads and validation"""
+
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='uploads',
+        help_text="User who uploaded the file"
+    )
+
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('validating', 'Validating'),
@@ -55,11 +64,37 @@ class DataUpload(models.Model):
         ('rejected', 'Rejected'),
     ]
     
+
+    FILE_TYPES = [
+        ('excel', 'Excel File'),
+        ('csv', 'CSV File'),
+        ('text', 'Text File'),
+        ('pdf', 'PDF Document'),
+        ('generic', 'Generic File'),  # Added generic as default
+    ]
+    
     template_type = models.CharField(
         max_length=20, 
         choices=DataTemplate.TEMPLATE_TYPES,
         default='vendor'
     )
+    
+    # Updated field with default
+    file_type = models.CharField(
+        max_length=20,
+        choices=FILE_TYPES,
+        default='generic',  # Set default value
+        help_text="Type of file being uploaded"
+    )
+    
+    data_type = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        help_text="Descriptive name for generic uploads"
+    )
+
+
     file = models.FileField(
         upload_to=get_upload_path,
         max_length=255
@@ -69,6 +104,12 @@ class DataUpload(models.Model):
         choices=STATUS_CHOICES, 
         default='pending'
     )
+    notes = models.TextField(
+            null=True, 
+            blank=True,
+            help_text="Optional notes about the upload"
+        )
+
     validation_errors = models.JSONField(
         null=True, 
         blank=True,
@@ -83,7 +124,9 @@ class DataUpload(models.Model):
         verbose_name_plural = 'Data Uploads'
 
     def __str__(self):
-        return f"{self.get_template_type_display()} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        if self.template_type:
+            return f"{self.get_template_type_display()} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.data_type or 'Generic Upload'} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
     @property
     def filename(self):
@@ -135,49 +178,87 @@ class DataUpload(models.Model):
     def validate_file(self):
         """Validates the uploaded file structure and content"""
         try:
-            # Read CSV file
-            df = pd.read_csv(self.file.path)
-            
-            # Get template for this type
+            # For generic file types, only validate basic file properties
+            if self.template_type in ['excel', 'csv', 'text', 'pdf', 'generic']:
+                # Check file extension
+                ext = os.path.splitext(self.file.name)[1].lower()
+                allowed_extensions = {
+                    'excel': ['.xlsx', '.xls'],
+                    'csv': ['.csv'],
+                    'text': ['.txt'],
+                    'pdf': ['.pdf'],
+                    'generic': ['.xlsx', '.xls', '.csv', '.txt', '.pdf']
+                }
+                
+                if ext not in allowed_extensions.get(self.template_type, []):
+                    return False, {'error': f'Invalid file extension for type {self.template_type}'}
+                
+                # For CSV files, try to validate structure
+                if self.template_type == 'csv':
+                    try:
+                        pd.read_csv(self.file.path)
+                    except pd.errors.EmptyDataError:
+                        return False, {'error': 'The CSV file is empty'}
+                    except pd.errors.ParserError:
+                        return False, {'error': 'Invalid CSV format'}
+                
+                # For Excel files, try to validate structure
+                if self.template_type == 'excel':
+                    try:
+                        pd.read_excel(self.file.path)
+                    except Exception as e:
+                        return False, {'error': f'Invalid Excel file: {str(e)}'}
+                
+                return True, None
+                
+            # For template-based files, use standard validation
             try:
-                template = DataTemplate.objects.get(template_type=self.template_type)
-                expected_headers = template.required_headers.get('headers', [])
-            except DataTemplate.DoesNotExist:
-                return False, {'error': f'No template found for type: {self.template_type}'}
-            
-            # Normalize headers for comparison (case-insensitive)
-            file_headers = [col.lower().strip() for col in df.columns]
-            expected_headers_normalized = [header.lower().strip() for header in expected_headers]
-            
-            # Find missing and extra headers
-            missing_headers = [
-                header for header in expected_headers
-                if header.lower().strip() not in file_headers
-            ]
-            extra_headers = [
-                col for col in df.columns
-                if col.lower().strip() not in expected_headers_normalized
-            ]
-            
-            errors = {}
-            if missing_headers:
-                errors['missing_headers'] = missing_headers
-            
-            if extra_headers:
-                errors['extra_headers'] = extra_headers
-            
-            # If headers are valid, perform data validation
-            if len(missing_headers) == 0:
-                data_errors = self.validate_data(df)
-                if data_errors:
-                    errors.update(data_errors)
-            
-            return len(errors) == 0, errors
-            
-        except pd.errors.EmptyDataError:
-            return False, {'error': 'The file is empty'}
-        except pd.errors.ParserError:
-            return False, {'error': 'Invalid CSV format'}
+                # Read CSV file
+                df = pd.read_csv(self.file.path)
+                
+                # Get template for this type
+                try:
+                    template = DataTemplate.objects.get(template_type=self.template_type)
+                    expected_headers = template.required_headers.get('headers', [])
+                except DataTemplate.DoesNotExist:
+                    return False, {'error': f'No template found for type: {self.template_type}'}
+                
+                # Normalize headers for comparison (case-insensitive)
+                file_headers = [col.lower().strip() for col in df.columns]
+                expected_headers_normalized = [header.lower().strip() for header in expected_headers]
+                
+                # Find missing and extra headers
+                missing_headers = [
+                    header for header in expected_headers
+                    if header.lower().strip() not in file_headers
+                ]
+                extra_headers = [
+                    col for col in df.columns
+                    if col.lower().strip() not in expected_headers_normalized
+                ]
+                
+                errors = {}
+                if missing_headers:
+                    errors['missing_headers'] = missing_headers
+                
+                if extra_headers:
+                    errors['extra_headers'] = extra_headers
+                
+                # If headers are valid, perform data validation
+                if len(missing_headers) == 0:
+                    data_errors = self.validate_data(df)
+                    if data_errors:
+                        errors.update(data_errors)
+                
+                return len(errors) == 0, errors
+                
+            except pd.errors.EmptyDataError:
+                return False, {'error': 'The file is empty'}
+            except pd.errors.ParserError:
+                return False, {'error': 'Invalid CSV format'}
+            except Exception as e:
+                return False, {'error': f'Error validating file: {str(e)}'}
+                
         except Exception as e:
             return False, {'error': f'Error validating file: {str(e)}'}
 

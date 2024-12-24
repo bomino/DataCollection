@@ -85,9 +85,9 @@ class DataTemplateAdmin(ImportExportModelAdmin):
 
 @admin.register(DataUpload)
 class DataUploadAdmin(ImportExportModelAdmin):
-    list_display = ('filename', 'template_type', 'status_badge', 'file_size', 'created_at')
-    list_filter = ('template_type', 'status', 'created_at')
-    search_fields = ('file', 'template_type')
+    list_display = ('filename', 'template_type', 'user','status_badge', 'file_size', 'created_at')
+    list_filter = ('template_type', 'status', 'user','created_at')
+    search_fields = ('file', 'template_type','user__username')
     readonly_fields = ('created_at', 'updated_at', 'file_size', 'file_preview')
     save_on_top = True
     date_hierarchy = 'created_at'
@@ -114,6 +114,17 @@ class DataUploadAdmin(ImportExportModelAdmin):
             'description': 'Upload and modification timestamps'
         }),
     )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(user=request.user)
+
+    def save_model(self, request, obj, form, change):
+        if not change:  # If creating new object
+            obj.user = request.user
+        super().save_model(request, obj, form, change)
 
     def status_badge(self, obj):
         status_colors = {

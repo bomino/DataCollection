@@ -12,4 +12,6 @@ urlpatterns = [
     path('uploads/', views.upload_list, name='upload_list'),
     path('download-template/<str:template_type>/', views.download_template, name='download_template'),
     path('delete-upload/<int:pk>/', views.delete_upload, name='delete_upload'),
+    path('upload/generic/', views.generic_upload, name='generic_upload'),
+    path('api-test/', views.api_test, name='api_test'),
 ]
