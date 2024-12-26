@@ -1,5 +1,3 @@
-/* static/css/admin.css */
-
 /* CSS Variables */
 :root {
     --primary-color: #0d6efd;
@@ -13,14 +11,36 @@
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.2s ease-in-out;
+    --padding-sm: 8px;
+    --padding-md: 12px;
+    --padding-lg: 15px;
+    --padding-xl: 20px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 12px;
 }
 
-/* Header Styling */
+/* Base Layout */
+body {
+    background: #fff;
+    color: #333;
+}
+
+.content {
+    padding: var(--padding-xl);
+}
+
+#content-main {
+    margin-top: var(--padding-xl);
+}
+
+/* Header */
 #header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
     box-shadow: var(--shadow-sm);
-    padding: 15px 40px;
+    padding: var(--padding-lg) 40px;
 }
 
 #branding h1 {
@@ -45,47 +65,42 @@ div[class^="module"] caption {
     background: var(--primary-color);
     color: white;
     font-weight: 500;
-    padding: 12px 15px;
-    border-radius: 8px 8px 0 0;
+    padding: var(--padding-md) var(--padding-lg);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 }
 
-/* Content Area */
-.content {
-    padding: 25px;
-}
-
-#content-main {
-    margin-top: 20px;
-}
-
-/* Table Enhancements */
+/* Tables */
 #changelist table {
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    margin-top: 15px;
+    margin-top: var(--padding-lg);
 }
 
 #changelist table thead th {
     background-color: var(--light-bg);
     border-bottom: 2px solid var(--border-color);
-    padding: 12px 15px;
+    padding: var(--padding-md) var(--padding-lg);
     font-weight: 600;
 }
 
 #changelist table td {
-    padding: 12px 15px;
+    padding: var(--padding-md) var(--padding-lg);
     vertical-align: middle;
+}
+
+/* Table Rows */
+.row1,
+.row2 {
+    transition: var(--transition);
 }
 
 .row1 {
     background-color: white;
-    transition: var(--transition);
 }
 
 .row2 {
     background-color: var(--light-bg);
-    transition: var(--transition);
 }
 
 .row1:hover,
@@ -93,9 +108,9 @@ div[class^="module"] caption {
     background-color: rgba(13, 110, 253, 0.05);
 }
 
-/* Form Improvements */
+/* Forms */
 .form-row {
-    padding: 15px;
+    padding: var(--padding-lg);
     border-bottom: 1px solid var(--border-color);
     transition: var(--transition);
 }
@@ -107,28 +122,36 @@ div[class^="module"] caption {
 .submit-row {
     background: white;
     border-top: 1px solid var(--border-color);
-    padding: 20px;
+    padding: var(--padding-xl);
     position: sticky;
     bottom: 0;
     z-index: 1000;
     box-shadow: var(--shadow-sm);
 }
 
+/* Buttons */
 .button,
 input[type=submit],
 input[type=button],
-.submit-row input {
-    border-radius: 6px;
-    padding: 8px 16px;
+.submit-row input,
+.addlink,
+.changelink,
+.deletelink {
+    border-radius: var(--border-radius-md);
+    padding: var(--padding-sm) var(--padding-md);
     transition: var(--transition);
     border: none;
     font-weight: 500;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
 }
 
-/* Badge Styling */
+/* Badges */
 .badge {
-    padding: 6px 12px;
+    padding: 6px var(--padding-md);
     border-radius: 50px;
     font-weight: 500;
     font-size: 0.75rem;
@@ -164,14 +187,14 @@ input[type=button],
 #changelist-filter h2 {
     background-color: var(--primary-color);
     color: white;
-    padding: 12px 15px;
+    padding: var(--padding-md) var(--padding-lg);
     margin: 0;
     font-size: 14px;
     font-weight: 600;
 }
 
 #changelist-filter ul {
-    padding: 15px;
+    padding: var(--padding-lg);
     margin: 0;
     list-style: none;
 }
@@ -180,12 +203,12 @@ input[type=button],
     margin: 8px 0;
 }
 
-/* Dashboard Cards */
+/* Dashboard */
 .dashboard .module {
     background: white;
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-sm);
-    margin-bottom: 20px;
+    margin-bottom: var(--padding-xl);
     transition: var(--transition);
     border: 1px solid var(--border-color);
 }
@@ -195,23 +218,9 @@ input[type=button],
     transform: translateY(-2px);
 }
 
-/* Action Buttons */
-.addlink,
-.changelink,
-.deletelink {
-    border-radius: 4px;
-    padding: 6px 12px;
-    margin: 2px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
 /* Pagination */
 .paginator {
-    padding: 15px;
+    padding: var(--padding-lg);
     background: white;
     border-top: 1px solid var(--border-color);
     display: flex;
@@ -221,13 +230,13 @@ input[type=button],
 
 .paginator .this-page {
     background: var(--primary-color);
-    border-radius: 6px;
-    padding: 6px 12px;
+    border-radius: var(--border-radius-md);
+    padding: 6px var(--padding-md);
     color: white;
     font-weight: 500;
 }
 
-/* Login Form Enhancements */
+/* Login Form */
 .login {
     background: var(--light-bg);
     min-height: 100vh;
@@ -238,12 +247,12 @@ input[type=button],
 
 .login #container {
     background: white;
-    border-radius: 12px;
+    border-radius: var(--border-radius-xl);
     box-shadow: var(--shadow-md);
     padding: 30px;
     max-width: 400px;
     width: 100%;
-    margin: 20px;
+    margin: var(--padding-xl);
 }
 
 .login #header {
@@ -258,94 +267,13 @@ input[type=button],
     padding: 0;
 }
 
-/* File Preview */
-.file-preview {
-    background: var(--light-bg);
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 10px;
-    overflow-x: auto;
-}
-
-.file-preview table {
-    width: 100%;
-    font-size: 0.875rem;
-}
-
-/* Messages */
-.messagelist {
-    padding: 0;
-    margin-bottom: 20px;
-}
-
-.messagelist li {
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .content {
-        padding: 15px;
-    }
-
-    #header {
-        padding: 12px 20px;
-    }
-
-    .form-row {
-        padding: 12px;
-    }
-
-    #changelist-filter {
-        border-left: none;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --light-bg: #1a1d20;
-        --border-color: #2d3238;
-    }
-
-    body {
-        background: #121417;
-        color: #e9ecef;
-    }
-
-    .dashboard .module,
-    #changelist table,
-    .submit-row,
-    .file-preview {
-        background: #1a1d20;
-    }
-
-    .row1 {
-        background: #1a1d20;
-    }
-
-    .row2 {
-        background: #212529;
-    }
-
-    .form-row:hover {
-        background: #212529;
-    }
-}
-
-
-/* Generic Upload Styles */
+/* File Upload */
 .upload-dropzone {
     border: 2px dashed var(--primary-color);
-    border-radius: 8px;
+    border-radius: var(--border-radius-lg);
     padding: 2rem;
     position: relative;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     background: rgba(13, 110, 253, 0.02);
 }
 
@@ -357,39 +285,17 @@ input[type=button],
 
 .upload-dropzone .file-input {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+    inset: 0;
     opacity: 0;
     cursor: pointer;
 }
 
-.dropzone-content {
-    pointer-events: none;
-}
-
-/* File List Styles */
-.selected-files .list-group-item {
-    transition: all 0.2s ease;
-}
-
-.selected-files .list-group-item:hover {
-    background-color: var(--light-bg);
-}
-
-.selected-files .btn-outline-danger {
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
-}
-
-.selected-files .list-group-item:hover .btn-outline-danger {
-    opacity: 1;
-}
-
-.browse-btn {
-    pointer-events: all;
-    cursor: pointer;
+.upload-instructions {
+    background: var(--light-bg);
+    border-left: 4px solid var(--primary-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--border-radius-sm);
 }
 
 /* File Type Icons */
@@ -409,11 +315,60 @@ input[type=button],
     color: #198754;
 }
 
-/* Upload Instructions */
-.upload-instructions {
-    background: var(--light-bg);
-    border-left: 4px solid var(--primary-color);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 4px;
+/* Messages */
+.messagelist {
+    padding: 0;
+    margin-bottom: var(--padding-xl);
+}
+
+.messagelist li {
+    padding: var(--padding-md) var(--padding-lg);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--padding-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+
+    .content,
+    #header,
+    .form-row {
+        padding: var(--padding-md) var(--padding-xl);
+    }
+
+    #changelist-filter {
+        border-left: none;
+    }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --light-bg: #1a1d20;
+        --border-color: #2d3238;
+    }
+
+    body {
+        background: #121417;
+        color: #e9ecef;
+    }
+
+    .dashboard .module,
+    #changelist table,
+    .submit-row,
+    .file-preview,
+    .row1 {
+        background: #1a1d20;
+    }
+
+    .row2 {
+        background: #212529;
+    }
+
+    .form-row:hover {
+        background: #212529;
+    }
 }

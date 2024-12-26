@@ -32,13 +32,13 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}"><i class="bi bi-house me-1"></i>Home</a>
+                <a class="nav-link" href="{% url 'home' %}"><i class="bi bi-house me-1"></i>Smart Import</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'upload_list' %}"><i class="bi bi-list-ul me-1"></i>View Uploads</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'generic_upload' %}"><i class="bi bi-cloud-upload me-1"></i>Generic Upload</a>
+                <a class="nav-link" href="{% url 'generic_upload' %}"><i class="bi bi-cloud-upload me-1"></i>Quick Upload</a>
               </li>
               <!-- In base.html navigation -->
               {% if user.is_authenticated %}

@@ -1,3 +1,0 @@
-Facility ID,Facility Name,Ship To Address,Ship To State,Ship To Zip,Ship To Phone,Ship To Fax,Bill To Address,Bill To State,Bill To Zip,Bill To Phone,Bill To Fax,Tax ID Number,State Sales Tax Rate,County Tax Rate,County Name,City Tax Rate,City Name,Status
-F001,Main Hospital,789 Healthcare Drive,TN,37919,865-555-0100,865-555-0101,789 Healthcare Drive,TN,37919,865-555-0100,865-555-0101,62-1234567,7.00,2.25,Knox,2.25,Knoxville,Active
-F002,West Wing,790 Healthcare Drive,TN,37919,865-555-0200,865-555-0201,789 Healthcare Drive,TN,37919,865-555-0100,865-555-0101,62-1234567,7.00,2.25,Knox,2.25,Knoxville,Active
